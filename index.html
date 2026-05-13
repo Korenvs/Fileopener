@@ -140,8 +140,17 @@
         //     https://yourhost/?path=AcmeCorp&action=folder
         // ----------------------------------------------------------
         const params = new URLSearchParams(window.location.search);
-        const path = params.get('path') || '';
+        let path = params.get('path') || '';
         const action = (params.get('action') || 'open').toLowerCase();
+
+        // Strip surrounding quotes (from Windows "Copy as path" which wraps paths in quotes)
+        path = path.trim();
+        if ((path.startsWith('"') && path.endsWith('"')) ||
+            (path.startsWith("'") && path.endsWith("'"))) {
+            path = path.slice(1, -1);
+        }
+        // Also strip any stray quotes that survived URL encoding
+        path = path.replace(/^["']+|["']+$/g, '');
 
         // Display path
         document.getElementById('path-display').textContent = path || '(no path)';
