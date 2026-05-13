@@ -153,13 +153,15 @@
             document.getElementById('title').textContent = 'פותח תיקייה...';
         }
 
-        // Validation
+        // Validation - only block empty path and path traversal.
+        // Absolute paths are allowed here; the PowerShell handler validates
+        // them against BaseFolder.
         if (!path) {
             document.getElementById('error').style.display = 'block';
             document.getElementById('error').textContent = 'שגיאה: לא צוין נתיב קובץ (?path=...)';
             document.getElementById('open-btn').style.display = 'none';
             document.getElementById('folder-btn').style.display = 'none';
-        } else if (path.includes('..') || path.match(/^[a-zA-Z]:[\\\/]/) || path.startsWith('\\\\')) {
+        } else if (path.includes('..')) {
             document.getElementById('error').style.display = 'block';
             document.getElementById('error').textContent = 'שגיאה: נתיב לא חוקי';
             document.getElementById('open-btn').style.display = 'none';
